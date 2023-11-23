@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jazdaz.JazdaZ.database.course.CourseEntity;
+import jazdaz.JazdaZ.validator.email.Email;
+import jazdaz.JazdaZ.validator.password.Password;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +43,7 @@ public class UserEntity {
 
     @Column(columnDefinition = "text", nullable = false, unique = true)
     @NotEmpty
-//    @Email
+    @Email
     private String email;
 
     @Column(columnDefinition = "text", nullable = false, unique = true)
@@ -51,7 +53,7 @@ public class UserEntity {
 
     @Column(columnDefinition = "text", nullable = false)
     @NotEmpty
-//    @Password
+    @Password
     private String password;
 
     @Column(columnDefinition = "text")
