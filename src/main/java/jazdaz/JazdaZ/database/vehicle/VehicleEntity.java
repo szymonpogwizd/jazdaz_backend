@@ -1,7 +1,11 @@
-package jazdaz.JazdaZ.database.vehicles;
+package jazdaz.JazdaZ.database.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jazdaz.JazdaZ.database.course.courseCategory.CourseCategoryEntity;
+import jazdaz.JazdaZ.database.lesson.LessonEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +17,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Table(name = "vehicles")
-public class VehiclesEntity {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = VehicleEntity.class)
+public class VehicleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,4 +39,11 @@ public class VehiclesEntity {
 
     @Column(columnDefinition = "text")
     private String color;
+
+    @OneToOne(mappedBy = "vehicle")
+    private LessonEntity lesson;
+
+    @ManyToOne
+    @JoinColumn(name = "courseCategoryId")
+    private CourseCategoryEntity courseCategory;
 }

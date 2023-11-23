@@ -1,12 +1,18 @@
 package jazdaz.JazdaZ.database.user;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jazdaz.JazdaZ.database.course.CourseEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +20,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = UserEntity.class)
 public class UserEntity {
 
     @Id
@@ -51,4 +58,12 @@ public class UserEntity {
     private String token;
 
     private ZonedDateTime tokenExpiration;
+
+    @ManyToMany
+    @JoinTable(
+            name = "usersCourses",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "coursesId"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<CourseEntity> courses;
 }
