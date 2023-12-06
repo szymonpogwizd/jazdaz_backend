@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class CourseInfoDTO {
+public class CourseCategoryInfoDTO {
 
     private UUID id;
 

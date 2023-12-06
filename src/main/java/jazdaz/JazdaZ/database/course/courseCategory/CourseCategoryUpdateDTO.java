@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class CourseUpdateDTO {
+public class CourseCategoryUpdateDTO {
 
     @Size(min = 1, max = 10)
     @NotBlank

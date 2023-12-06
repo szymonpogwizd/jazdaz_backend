@@ -13,11 +13,11 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface UserMapper {
 
-    UserInfoDTO userDAO2UserInfoDTO(UserEntity userDAO);
+    UserInfoDTO userEntity2UserInfoDTO(UserEntity userDAO);
 
     @Mapping(target = "password", qualifiedBy = EncodedMapping.class)
-    UserEntity userCreateDTO2UserDAO(UserCreateDTO userCreateDTO);
+    UserEntity userCreateDTO2UserEntity(UserCreateDTO userCreateDTO);
 
-    UserEntity userUpdateDTO2UserDAO(UserUpdateDTO userUpdateDTO);
+    UserEntity userUpdateDTO2UserEntity(UserUpdateDTO userUpdateDTO);
 }
 
