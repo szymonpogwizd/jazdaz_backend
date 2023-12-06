@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jazdaz.JazdaZ.database.course.CourseEntity;
 import jazdaz.JazdaZ.validator.email.Email;
 import jazdaz.JazdaZ.validator.password.Password;
+import jazdaz.JazdaZ.validator.phone.Phone;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,7 +49,7 @@ public class UserEntity {
 
     @Column(columnDefinition = "text", nullable = false, unique = true)
     @NotEmpty
-//    @Phone
+    @Phone
     private String phone;
 
     @Column(columnDefinition = "text", nullable = false)
