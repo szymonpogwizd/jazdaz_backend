@@ -29,6 +29,10 @@ public class CourseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(nullable = false)
+    @NotEmpty
+    private String name;
+
     @Column(columnDefinition = "text", nullable = false)
     @NotEmpty
     private String status;
