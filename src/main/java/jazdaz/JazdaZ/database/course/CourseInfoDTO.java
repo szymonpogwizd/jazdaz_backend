@@ -11,6 +11,8 @@ public class CourseInfoDTO {
 
     private UUID id;
 
+    private String name;
+
     private String status;
 
     private LocalDate startDate;

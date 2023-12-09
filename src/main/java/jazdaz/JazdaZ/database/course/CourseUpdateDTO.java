@@ -11,6 +11,10 @@ import java.time.LocalDate;
 public class CourseUpdateDTO {
 
     @NotBlank
+    @Size(min = 1, max = 100)
+    private String name;
+
+    @NotBlank
     @Size(min = 1, max = 5000)
     private String status;
 
