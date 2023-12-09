@@ -25,23 +25,33 @@ public class CourseValidator {
     public void validateCourse(CourseEntity course, boolean isSameCourse) {
         List<String> validationErrors = new ArrayList<>();
 
-        if (course.getName() == null || course.getName().isEmpty()) {
-            validationErrors.add("Nazwa kursu nie może być pusta\n");
-        }
-
-        if (course.getStatus() == null || course.getStatus().isEmpty()) {
-            validationErrors.add("Status kursu nie może być pusty\n");
-        }
-
+        validateName(course, validationErrors);
+        validateStatus(course, validationErrors);
         if (!isSameCourse) {
-            if (courseRepository.findByName(course.getName()).isPresent()) {
-                validationErrors.add("Kurs o podanej nazwie już istnieje\n");
-            }
+            validateUniqueName(course, validationErrors);
         }
 
         if (!validationErrors.isEmpty()) {
             String errorMessage = String.join("", validationErrors);
             throw new ValidationException(errorMessage);
+        }
+    }
+
+    private void validateName(CourseEntity course, List<String> validationErrors) {
+        if (course.getName() == null || course.getName().isEmpty()) {
+            validationErrors.add("Nazwa kursu nie może być pusta\n");
+        }
+    }
+
+    private void validateStatus(CourseEntity course, List<String> validationErrors) {
+        if (course.getStatus() == null || course.getStatus().isEmpty()) {
+            validationErrors.add("Status kursu nie może być pusty\n");
+        }
+    }
+
+    private void validateUniqueName(CourseEntity course, List<String> validationErrors) {
+        if (courseRepository.findByName(course.getName()).isPresent()) {
+            validationErrors.add("Kurs o podanej nazwie już istnieje\n");
         }
     }
 }
