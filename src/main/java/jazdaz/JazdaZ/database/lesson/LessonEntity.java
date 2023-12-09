@@ -46,4 +46,17 @@ public class LessonEntity {
     @OneToOne
     @JoinColumn(name = "vehicleId")
     private VehicleEntity vehicle;
+
+    public LessonEntity() {
+    }
+
+    public LessonEntity(UUID id, String type, int hours_spend, LocalDate start_date, LocalDate end_date, CourseEntity course, VehicleEntity vehicle) {
+        this.id = id;
+        this.type = type;
+        this.hours_spend = hours_spend;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.course = course;
+        this.vehicle = vehicle;
+    }
 }
