@@ -50,4 +50,17 @@ public class CourseEntity {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LessonEntity> lessons;
+
+    public CourseEntity() {
+    }
+
+    public CourseEntity(UUID id, String name, String status, LocalDate startDate, List<UserEntity> users, CourseCategoryEntity courseCategory, List<LessonEntity> lessons) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.startDate = startDate;
+        this.users = users;
+        this.courseCategory = courseCategory;
+        this.lessons = lessons;
+    }
 }

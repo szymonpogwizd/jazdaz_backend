@@ -69,4 +69,20 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "coursesId"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<CourseEntity> courses;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(UUID id, String firstName, String lastName, UserType userType, String email, String phone, String password, String token, ZonedDateTime tokenExpiration, Set<CourseEntity> courses) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userType = userType;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.token = token;
+        this.tokenExpiration = tokenExpiration;
+        this.courses = courses;
+    }
 }

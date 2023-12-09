@@ -46,4 +46,18 @@ public class VehicleEntity {
     @ManyToOne
     @JoinColumn(name = "courseCategoryId")
     private CourseCategoryEntity courseCategory;
+
+    public VehicleEntity() {
+    }
+
+    public VehicleEntity(UUID id, String brand, String model, int year, String registrationNumber, String color, LessonEntity lesson, CourseCategoryEntity courseCategory) {
+        this.id = id;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.registrationNumber = registrationNumber;
+        this.color = color;
+        this.lesson = lesson;
+        this.courseCategory = courseCategory;
+    }
 }

@@ -38,4 +38,15 @@ public class CourseCategoryEntity {
 
     @OneToMany(mappedBy = "courseCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleEntity> vehicles;
+
+    public CourseCategoryEntity() {
+    }
+
+    public CourseCategoryEntity(UUID id, String drivingLicenceCategory, String name, List<CourseEntity> courses, List<VehicleEntity> vehicles) {
+        this.id = id;
+        this.drivingLicenceCategory = drivingLicenceCategory;
+        this.name = name;
+        this.courses = courses;
+        this.vehicles = vehicles;
+    }
 }
