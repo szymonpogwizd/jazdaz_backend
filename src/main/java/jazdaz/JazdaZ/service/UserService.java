@@ -82,4 +82,9 @@ public class UserService {
         log.debug("Getting all user types");
         return log.traceExit(List.of(UserType.values()));
     }
+
+    public Optional<UserEntity> findByEmail(String email) {
+        log.debug("Getting user by email {}", email);
+        return log.traceExit(userRepository.findByEmail(email));
+    }
 }
