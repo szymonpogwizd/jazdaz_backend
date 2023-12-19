@@ -4,7 +4,9 @@ import jazdaz.JazdaZ.database.lesson.*;
 import jazdaz.JazdaZ.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,6 +45,16 @@ public class LessonController {
                         .stream()
                         .map(lessonMapper::lessonEntity2LessonInfoDTO)
                         .collect(java.util.stream.Collectors.toList())
+        );
+    }
+
+    @GetMapping("{id}")
+    public LessonInfoDTO getLesson(@PathVariable UUID id) {
+        log.debug("Getting lesson {}", id);
+        return log.traceExit(
+                lessonService.getLesson(id)
+                        .map(lessonMapper::lessonEntity2LessonInfoDTO)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lesson not found"))
         );
     }
 

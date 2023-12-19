@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.ValidationException;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -70,6 +71,11 @@ public class UserService {
     public List<UserEntity> getAll() {
         log.debug("Getting all users");
         return log.traceExit(userRepository.findAll());
+    }
+
+    public Optional<UserEntity> getUser(UUID id) {
+        log.debug("Getting user {}", id);
+        return log.traceExit(userRepository.findById(id));
     }
 
     public List<UserType> getAllUserTypes() {
