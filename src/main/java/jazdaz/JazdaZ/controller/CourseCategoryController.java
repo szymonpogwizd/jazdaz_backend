@@ -4,7 +4,9 @@ import jazdaz.JazdaZ.database.course.courseCategory.*;
 import jazdaz.JazdaZ.service.CourseCategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -44,6 +46,16 @@ public class CourseCategoryController {
                         .stream()
                         .map(courseCategoryMapper::courseCategoryEntity2CourseCategoryInfoDTO)
                         .collect(Collectors.toList())
+        );
+    }
+
+    @GetMapping("{id}")
+    public CourseCategoryInfoDTO getCourseCategory(@PathVariable UUID id) {
+        log.debug("Getting course category {}", id);
+        return log.traceExit(
+                courseCategoryService.getCourseCategory(id)
+                        .map(courseCategoryMapper::courseCategoryEntity2CourseCategoryInfoDTO)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course category not found"))
         );
     }
 

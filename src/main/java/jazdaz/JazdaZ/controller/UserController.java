@@ -4,7 +4,9 @@ import jazdaz.JazdaZ.database.user.*;
 import jazdaz.JazdaZ.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -45,6 +47,16 @@ public class UserController {
                         .stream()
                         .map(userMapper::userEntity2UserInfoDTO)
                         .collect(Collectors.toList())
+        );
+    }
+
+    @GetMapping("{id}")
+    public UserInfoDTO getUser(@PathVariable UUID id) {
+        log.debug("Getting user {}", id);
+        return log.traceExit(
+                userService.getUser(id)
+                        .map(userMapper::userEntity2UserInfoDTO)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"))
         );
     }
 

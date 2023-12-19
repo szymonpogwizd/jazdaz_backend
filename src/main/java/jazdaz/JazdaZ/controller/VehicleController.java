@@ -4,7 +4,9 @@ import jazdaz.JazdaZ.database.vehicle.*;
 import jazdaz.JazdaZ.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,6 +45,16 @@ public class VehicleController {
                         .stream()
                         .map(vehicleMapper::vehicleEntity2VehicleInfoDTO)
                         .collect(java.util.stream.Collectors.toList())
+        );
+    }
+
+    @GetMapping("{id}")
+    public VehicleInfoDTO getVehicle(@PathVariable UUID id) {
+        log.debug("Getting vehicle {}", id);
+        return log.traceExit(
+                vehicleService.getVehicle(id)
+                        .map(vehicleMapper::vehicleEntity2VehicleInfoDTO)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not found"))
         );
     }
 

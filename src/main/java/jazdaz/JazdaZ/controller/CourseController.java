@@ -5,7 +5,9 @@ import jazdaz.JazdaZ.database.course.*;
 import jazdaz.JazdaZ.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -45,6 +47,16 @@ public class CourseController {
                         .stream()
                         .map(courseMapper::courseEntity2CourseInfoDTO)
                         .collect(Collectors.toList())
+        );
+    }
+
+    @GetMapping("{id}")
+    public CourseInfoDTO getCourse(@PathVariable UUID id) {
+        log.debug("Getting course {}", id);
+        return log.traceExit(
+                courseService.getCourse(id)
+                        .map(courseMapper::courseEntity2CourseInfoDTO)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"))
         );
     }
 

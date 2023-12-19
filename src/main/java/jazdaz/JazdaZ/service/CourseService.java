@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -54,5 +55,10 @@ public class CourseService {
     public List<CourseEntity> getAll() {
         log.debug("Getting all courses");
         return log.traceExit(courseRepository.findAll());
+    }
+
+    public Optional<CourseEntity> getCourse(UUID id) {
+        log.debug("Getting course {}", id);
+        return log.traceExit(courseRepository.findById(id));
     }
 }
