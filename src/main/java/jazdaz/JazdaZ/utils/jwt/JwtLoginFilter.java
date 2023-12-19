@@ -6,6 +6,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jazdaz.JazdaZ.database.user.UserEntity;
+import jazdaz.JazdaZ.database.user.UserInfoDTO;
+import jazdaz.JazdaZ.database.user.UserMapper;
+import jazdaz.JazdaZ.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,13 +19,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JwtUtils jwtUtils;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
-    public JwtLoginFilter(String url, AuthenticationManager authManager, JwtUtils jwtUtils) {
+    public JwtLoginFilter(String url, AuthenticationManager authManager, JwtUtils jwtUtils, UserService userService, UserMapper userMapper) {
         super(new AntPathRequestMatcher(url));
+        this.userService = userService;
+        this.userMapper = userMapper;
         setAuthenticationManager(authManager);
         this.jwtUtils = jwtUtils;
     }
@@ -46,13 +55,20 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         String userRole = auth.getAuthorities().stream().findFirst().get().getAuthority();
 
-        String token = Jwts.builder()
-                .setSubject(auth.getName())
-                .claim("role", userRole)
+        Optional<UserEntity> user = userService.findByEmail(auth.getName());
+        if (user.isPresent()) {
+            UserEntity userEntity = user.get();
+            UserInfoDTO userInfoDTO = userMapper.userEntity2UserInfoDTO(userEntity);
+
+            String token = Jwts.builder()
+                    .setSubject(auth.getName())
+                    .claim("role", userRole)
+                    .claim("user", userInfoDTO)
 //                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(jwtUtils.getSecretKey())
-                .compact();
-        res.addHeader("Access-Control-Expose-Headers", "Authorization");
-        res.addHeader("Authorization", "Bearer " + token);
+                    .signWith(jwtUtils.getSecretKey())
+                    .compact();
+            res.addHeader("Access-Control-Expose-Headers", "Authorization");
+            res.addHeader("Authorization", "Bearer " + token);
+        }
     }
 }

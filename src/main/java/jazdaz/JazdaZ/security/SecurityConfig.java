@@ -1,6 +1,8 @@
 package jazdaz.JazdaZ.security;
 
 import jazdaz.JazdaZ.configuration.PasswordEncoderConfig;
+import jazdaz.JazdaZ.database.user.UserMapper;
+import jazdaz.JazdaZ.service.UserService;
 import jazdaz.JazdaZ.utils.jwt.JwtAuthenticationFilter;
 import jazdaz.JazdaZ.utils.jwt.JwtLoginFilter;
 import jazdaz.JazdaZ.utils.jwt.JwtUtils;
@@ -23,12 +25,16 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtUtils jwtUtils;
+    private final UserService userService;
+    private final UserMapper userMapper;
     private final UserDetailsServiceImpl userDetailsService;
     @Autowired
     private PasswordEncoderConfig passwordEncoderConfig;
 
-    public SecurityConfig(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(JwtUtils jwtUtils, UserService userService, UserMapper userMapper, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtils = jwtUtils;
+        this.userService = userService;
+        this.userMapper = userMapper;
         this.userDetailsService = userDetailsService;
     }
 
@@ -56,7 +62,7 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                 .and()
-                .addFilterBefore(new JwtLoginFilter("/login", authenticationManagerBean(), jwtUtils), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtLoginFilter("/login", authenticationManagerBean(), jwtUtils, userService, userMapper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManagerBean(), jwtUtils), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
