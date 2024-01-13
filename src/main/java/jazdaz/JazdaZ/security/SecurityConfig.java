@@ -54,15 +54,15 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**", "/error").permitAll()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/users/**").hasAnyAuthority("ADMINISTRATOR", "SUPER_ADMINISTRATOR", "USER")
-//                .requestMatchers("/users/**").hasAuthority("SUPER_ADMINISTRATOR")
+                .requestMatchers("/users/**").hasAnyAuthority("ADMINISTRATOR", "SUPER_ADMINISTRATOR")
+                .requestMatchers("/users/**").hasAuthority("SUPER_ADMINISTRATOR")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
                 .formLogin()
                 .and()
-//                .addFilterBefore(new JwtLoginFilter("/login", authenticationManagerBean(), jwtUtils, userService, userMapper), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtLoginFilter("/login", authenticationManagerBean(), jwtUtils, userService, userMapper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManagerBean(), jwtUtils), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
