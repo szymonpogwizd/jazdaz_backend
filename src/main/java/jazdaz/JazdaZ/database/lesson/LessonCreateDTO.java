@@ -1,10 +1,10 @@
 package jazdaz.JazdaZ.database.lesson;
 
 import jakarta.validation.constraints.NotBlank;
-import jazdaz.JazdaZ.database.course.CourseEntity;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 public class LessonCreateDTO {
@@ -19,5 +19,5 @@ public class LessonCreateDTO {
 
     private LocalDate end_date;
 
-    private CourseEntity course;
+    private UUID courseId;
 }

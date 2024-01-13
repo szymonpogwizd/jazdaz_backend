@@ -1,5 +1,6 @@
 package jazdaz.JazdaZ.controller;
 
+import jazdaz.JazdaZ.database.course.CourseRepository;
 import jazdaz.JazdaZ.database.lesson.*;
 import jazdaz.JazdaZ.service.LessonService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,13 @@ public class LessonController {
 
     private final LessonService lessonService;
     private final LessonMapper lessonMapper;
+    private final CourseRepository courseRepository;
 
     @PostMapping
     public LessonInfoDTO createLesson(@RequestBody @Valid LessonCreateDTO lesson) {
         log.debug("Create lesson {}", lesson);
         LessonEntity toCreate = lessonMapper.lessonCreateDTO2LessonEntity(lesson);
+        courseRepository.findById(lesson.getCourseId()).ifPresent(toCreate::setCourse);
         LessonEntity createdLesson = lessonService.create(toCreate);
         return log.traceExit(lessonMapper.lessonEntity2LessonInfoDTO(createdLesson));
     }
@@ -33,7 +36,9 @@ public class LessonController {
     @PutMapping("{id}")
     public LessonInfoDTO updateLesson(@RequestBody @Valid LessonUpdateDTO lesson, @PathVariable UUID id) {
         log.debug("Update lesson {}: {}", id, lesson);
-        LessonEntity updatedLesson = lessonService.update(id, lessonMapper.lessonUpdateDTO2LessonEntity(lesson));
+        LessonEntity toUpdate = lessonMapper.lessonUpdateDTO2LessonEntity(lesson);
+        courseRepository.findById(lesson.getCourseId()).ifPresent(toUpdate::setCourse);
+        LessonEntity updatedLesson = lessonService.update(id, toUpdate);
         return log.traceExit(lessonMapper.lessonEntity2LessonInfoDTO(updatedLesson));
     }
 

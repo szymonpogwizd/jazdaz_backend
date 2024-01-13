@@ -1,10 +1,10 @@
 package jazdaz.JazdaZ.database.vehicle;
 
-import jazdaz.JazdaZ.database.course.courseCategory.CourseCategoryEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Data
 public class VehicleUpdateDTO {
@@ -24,5 +24,5 @@ public class VehicleUpdateDTO {
     @Size(min = 1, max = 100)
     private String color;
 
-    private CourseCategoryEntity courseCategory;
+    private UUID courseCategoryId;
 }

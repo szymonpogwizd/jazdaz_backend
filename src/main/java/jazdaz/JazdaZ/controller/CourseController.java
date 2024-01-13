@@ -2,6 +2,7 @@ package jazdaz.JazdaZ.controller;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jazdaz.JazdaZ.database.course.*;
+import jazdaz.JazdaZ.database.course.courseCategory.CourseCategoryRepository;
 import jazdaz.JazdaZ.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,11 +24,13 @@ public class CourseController {
 
     private final CourseService courseService;
     private final CourseMapper courseMapper;
+    private final CourseCategoryRepository courseCategoryRepository;
 
     @PostMapping
     public CourseInfoDTO createCourse(@RequestBody @Valid CourseCreateDTO course) {
         log.debug("Create course {}", course);
         CourseEntity toCreate = courseMapper.courseCreateDTO2CourseEntity(course);
+        courseCategoryRepository.findById(course.getCourseCategoryId()).ifPresent(toCreate::setCourseCategory);
         CourseEntity createdCourse = courseService.create(toCreate);
         return log.traceExit(courseMapper.courseEntity2CourseInfoDTO(createdCourse));
     }
@@ -35,7 +38,9 @@ public class CourseController {
     @PutMapping("{id}")
     public CourseInfoDTO updateCourse(@RequestBody @Valid CourseUpdateDTO course, @PathVariable UUID id) {
         log.debug("Update course {}: {}", id, course);
-        CourseEntity updatedCourse = courseService.update(id, courseMapper.courseUpdateDTO2CourseEntity(course));
+        CourseEntity toUpdate = courseMapper.courseUpdateDTO2CourseEntity(course);
+        courseCategoryRepository.findById(course.getCourseCategoryId()).ifPresent(toUpdate::setCourseCategory);
+        CourseEntity updatedCourse = courseService.update(id, toUpdate);
         return log.traceExit(courseMapper.courseEntity2CourseInfoDTO(updatedCourse));
     }
 
