@@ -1,6 +1,5 @@
 package jazdaz.JazdaZ.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jazdaz.JazdaZ.database.course.*;
 import jazdaz.JazdaZ.database.course.courseCategory.CourseCategoryRepository;
 import jazdaz.JazdaZ.service.CourseService;
