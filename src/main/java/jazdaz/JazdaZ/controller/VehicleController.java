@@ -1,5 +1,6 @@
 package jazdaz.JazdaZ.controller;
 
+import jazdaz.JazdaZ.database.course.courseCategory.CourseCategoryRepository;
 import jazdaz.JazdaZ.database.vehicle.*;
 import jazdaz.JazdaZ.service.VehicleService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,13 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
     private final VehicleMapper vehicleMapper;
+    private final CourseCategoryRepository courseCategoryRepository;
 
     @PostMapping
     public VehicleInfoDTO createVehicle(@RequestBody @Valid VehicleCreateDTO vehicle) {
         log.debug("Create vehicle {}", vehicle);
         VehicleEntity toCreate = vehicleMapper.vehicleCreateDTO2VehicleEntity(vehicle);
+        courseCategoryRepository.findById(vehicle.getCourseCategoryId()).ifPresent(toCreate::setCourseCategory);
         VehicleEntity createdVehicle = vehicleService.create(toCreate);
         return log.traceExit(vehicleMapper.vehicleEntity2VehicleInfoDTO(createdVehicle));
     }
