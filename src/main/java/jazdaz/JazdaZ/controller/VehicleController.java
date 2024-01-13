@@ -36,7 +36,9 @@ public class VehicleController {
     @PutMapping("{id}")
     public VehicleInfoDTO updateVehicle(@RequestBody @Valid VehicleUpdateDTO vehicle, @PathVariable UUID id) {
         log.debug("Update vehicle {}: {}", id, vehicle);
-        VehicleEntity updatedVehicle = vehicleService.update(id, vehicleMapper.vehicleUpdateDTO2VehicleEntity(vehicle));
+        VehicleEntity toUpdate = vehicleMapper.vehicleUpdateDTO2VehicleEntity(vehicle);
+        courseCategoryRepository.findById(vehicle.getCourseCategoryId()).ifPresent(toUpdate::setCourseCategory);
+        VehicleEntity updatedVehicle = vehicleService.update(id, toUpdate);
         return log.traceExit(vehicleMapper.vehicleEntity2VehicleInfoDTO(updatedVehicle));
     }
 

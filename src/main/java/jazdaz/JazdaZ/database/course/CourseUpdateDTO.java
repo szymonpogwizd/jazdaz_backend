@@ -1,11 +1,11 @@
 package jazdaz.JazdaZ.database.course;
 
-import jazdaz.JazdaZ.database.course.courseCategory.CourseCategoryEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 public class CourseUpdateDTO {
@@ -20,5 +20,5 @@ public class CourseUpdateDTO {
 
     private LocalDate startDate;
 
-    private CourseCategoryEntity courseCategory;
+    private UUID courseCategoryId;
 }

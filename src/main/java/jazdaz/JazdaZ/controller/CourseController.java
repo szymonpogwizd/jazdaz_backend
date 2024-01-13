@@ -38,7 +38,9 @@ public class CourseController {
     @PutMapping("{id}")
     public CourseInfoDTO updateCourse(@RequestBody @Valid CourseUpdateDTO course, @PathVariable UUID id) {
         log.debug("Update course {}: {}", id, course);
-        CourseEntity updatedCourse = courseService.update(id, courseMapper.courseUpdateDTO2CourseEntity(course));
+        CourseEntity toUpdate = courseMapper.courseUpdateDTO2CourseEntity(course);
+        courseCategoryRepository.findById(course.getCourseCategoryId()).ifPresent(toUpdate::setCourseCategory);
+        CourseEntity updatedCourse = courseService.update(id, toUpdate);
         return log.traceExit(courseMapper.courseEntity2CourseInfoDTO(updatedCourse));
     }
 
